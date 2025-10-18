@@ -8,15 +8,14 @@ width, height = 800, 600
 screen = pg.display.set_mode((width, height))
 pg.display.set_caption("Word Guessing Game")
 font = pg.font.Font("Text_Font.ttf", 40)
-small_font = pg.font.Font("Text_Font.ttf", 30)
+small_font = pg.font.Font("runtime.otf", 30)
 
+red = (158, 43, 37)
+green = (56, 102, 65)
+white = (255, 255, 255)
+black = (0, 0, 0)
+pink = (233, 116, 81)
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-BURNT_SIENNA = (233, 116, 81)
-GRAY = (200, 200, 200)
-GREEN = (0, 180, 0)
-RED = (200, 0, 0)
 
 def draw_text(text, font, color, surface, x, y):
     txt = font.render(text, True, color)
@@ -45,7 +44,7 @@ message = ""
 # --- Main loop ---
 running = True
 while running:
-    screen.fill(BURNT_SIENNA)
+    screen.fill(pink)
     mouse_pos = pg.mouse.get_pos()
     clicked = False
 
@@ -71,11 +70,11 @@ while running:
                             message = f"You Win! The word was '{chosen_word}'."
 
     if state == MENU:
-        draw_text("Choose a Category", font, BLACK, screen, width//2, 100)
+        draw_text("Choose a Category", font, black, screen, width//2, 100)
         btns = []
         y = 250
         for i, name in category_names.items():
-            rect = draw_text(f"{i}. {name}", small_font, BLACK, screen, width//2, y)
+            rect = draw_text(f"{i}. {name}", small_font, black, screen, width//2, y)
             btns.append((rect, i))
             y += 80
 
@@ -88,8 +87,8 @@ while running:
                     state = PLAYING
 
     elif state == PLAYING:
-        draw_text("Word Guessing Game", font, BLACK, screen, width//2, 50)
-        draw_text(f"Turns left: {turns}", small_font, BLACK, screen, width//2, 100)
+        draw_text("Word Guessing Game", font, black, screen, width//2, 50)
+        draw_text(f"Turns left: {turns}", small_font, black, screen, width//2, 100)
 
         # Display word progress
         display_word = ""
@@ -100,14 +99,14 @@ while running:
                 display_word += ch + " "
             else:
                 display_word += "_ "
-        draw_text(display_word.strip(), font, BLACK, screen, width//2, height//2)
+        draw_text(display_word.strip(), font, black, screen, width//2, height//2)
 
-        draw_text("Type letters to guess!", small_font, BLACK, screen, width//2, height - 100)
+        draw_text("Type letters to guess!", small_font, black, screen, width//2, height - 100)
 
 
     elif state == END:
-        draw_text(message, font, GREEN if "Win" in message else RED, screen, width//2, height//2)
-        rect = draw_text("Click to return to menu", small_font, BLACK, screen, width//2, height - 100)
+        draw_text(message, font, green if "Win" in message else red, screen, width//2, height//2)
+        rect = draw_text("Click to return to menu", small_font, black, screen, width//2, height - 100)
         if clicked and rect.collidepoint(mouse_pos):
             state = MENU
 
