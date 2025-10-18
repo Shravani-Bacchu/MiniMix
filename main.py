@@ -31,17 +31,16 @@ categories = {
 category_names = {1: "Musicals", 2: "Desserts", 3: "Sports"}
 
 # --- Game states ---
-MENU = "menu"
-PLAYING = "playing"
-END = "end"
+Menu = "menu"
+Playing = "playing"
+End = "end"
 
-state = MENU
+state = Menu
 chosen_word = ""
 guesses = ""
 turns = 12
 message = ""
-
-# --- Main loop ---
+#Main Game Loop
 running = True
 while running:
     screen.fill(pink)
@@ -53,7 +52,7 @@ while running:
             running = False
         elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
             clicked = True
-        elif event.type == pg.KEYDOWN and state == PLAYING:
+        elif event.type == pg.KEYDOWN and state == Playing:
             if event.unicode.isalpha():
                 guess = event.unicode.lower()
                 if guess not in guesses:
@@ -61,15 +60,15 @@ while running:
                     if guess not in chosen_word:
                         turns -= 1
                         if turns == 0:
-                            state = END
+                            state = End
                             message = f"You Lose! The word was '{chosen_word}'."
                     else:
                         # Check win
                         if all(ch in guesses or ch == " " for ch in chosen_word):
-                            state = END
+                            state = End
                             message = f"You Win! The word was '{chosen_word}'."
 
-    if state == MENU:
+    if state == Menu:
         draw_text("Choose a Category", font, black, screen, width//2, 100)
         btns = []
         y = 250
@@ -83,14 +82,12 @@ while running:
                 if rect.collidepoint(mouse_pos):
                     chosen_word = random.choice(categories[cat_num])
                     guesses = ""
-                    turns = 12
-                    state = PLAYING
+                    turns = len(chosen_word)+ 3
+                    state = Playing
 
-    elif state == PLAYING:
+    elif state == Playing:
         draw_text("Word Guessing Game", font, black, screen, width//2, 50)
         draw_text(f"Turns left: {turns}", small_font, black, screen, width//2, 100)
-
-        # Display word progress
         display_word = ""
         for ch in chosen_word:
             if ch == " ":
@@ -104,11 +101,11 @@ while running:
         draw_text("Type letters to guess!", small_font, black, screen, width//2, height - 100)
 
 
-    elif state == END:
+    elif state == End:
         draw_text(message, font, green if "Win" in message else red, screen, width//2, height//2)
         rect = draw_text("Click to return to menu", small_font, black, screen, width//2, height - 100)
         if clicked and rect.collidepoint(mouse_pos):
-            state = MENU
+            state = Menu
 
     pg.display.flip()
 
