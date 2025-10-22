@@ -30,7 +30,6 @@ categories = {
 }
 category_names = {1: "Musicals", 2: "Desserts", 3: "Sports"}
 
-# --- Game states ---
 Menu = "menu"
 Playing = "playing"
 End = "end"
@@ -40,7 +39,7 @@ chosen_word = ""
 guesses = ""
 turns = 12
 message = ""
-#Main Game Loop
+
 running = True
 while running:
     screen.fill(pink)
@@ -97,10 +96,7 @@ while running:
             else:
                 display_word += "_ "
         draw_text(display_word.strip(), font, black, screen, width//2, height//2)
-
         draw_text("Type letters to guess!", small_font, black, screen, width//2, height - 100)
-
-
     elif state == End:
         draw_text(message, font, green if "Win" in message else red, screen, width//2, height//2)
         rect = draw_text("Click to return to menu", small_font, black, screen, width//2, height - 100)
