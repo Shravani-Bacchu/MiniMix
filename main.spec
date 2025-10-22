@@ -5,7 +5,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('Text_Font.ttf', '.'), ('runtime.otf', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
