@@ -1,21 +1,34 @@
 import pygame as pg
 import random
-import sys
+import sys, os
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS  
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 pg.init()
 
 width, height = 800, 600
 screen = pg.display.set_mode((width, height))
 pg.display.set_caption("Word Guessing Game")
-font = pg.font.Font("Text_Font.ttf", 40)
-small_font = pg.font.Font("runtime.otf", 30)
+
+def load_font(path, size):
+    try:
+        return pg.font.Font(resource_path(path), size)
+    except FileNotFoundError:
+        print(f"Font file '{path}' not found. Using default font.")
+        return pg.font.SysFont(None, size)
+
+font = load_font("Text_Font.ttf", 40)
+small_font = load_font("runtime.otf", 30)
 
 red = (158, 43, 37)
 green = (56, 102, 65)
 white = (255, 255, 255)
 black = (0, 0, 0)
 pink = (233, 116, 81)
-
 
 def draw_text(text, font, color, surface, x, y):
     txt = font.render(text, True, color)
@@ -81,12 +94,12 @@ while running:
                 if rect.collidepoint(mouse_pos):
                     chosen_word = random.choice(categories[cat_num])
                     guesses = ""
-                    turns = len(chosen_word)+ 3
+                    turns = len(chosen_word) + 3
                     state = Playing
 
     elif state == Playing:
         draw_text("Word Guessing Game", font, black, screen, width//2, 50)
-        draw_text(f"Turns left: {turns}", small_font, black, screen, width//2, 100)
+        draw_text(f"Turns left:{turns}", small_font, black, screen, width//2, 100)
         display_word = ""
         for ch in chosen_word:
             if ch == " ":
@@ -97,6 +110,7 @@ while running:
                 display_word += "_ "
         draw_text(display_word.strip(), font, black, screen, width//2, height//2)
         draw_text("Type letters to guess!", small_font, black, screen, width//2, height - 100)
+
     elif state == End:
         draw_text(message, font, green if "Win" in message else red, screen, width//2, height//2)
         rect = draw_text("Click to return to menu", small_font, black, screen, width//2, height - 100)
